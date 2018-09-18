@@ -1,16 +1,15 @@
 package com.rabo.statementprocessor.pojo;
 
-public class PojoClass {
+public class CsvANDXmlPojo {
 	String reference;
 
 	private String accountNumber;
-
 	private String Description;
 	private String StartBal;
 	private String mutation;
 	private String endBal;
 
-	public PojoClass() {
+	public CsvANDXmlPojo() {
 
 	}
 
@@ -62,7 +61,7 @@ public class PojoClass {
 		this.endBal = endBal;
 	}
 
-	public PojoClass(String reference, String accountNumber, String description, String startBal, String mutation,
+	public CsvANDXmlPojo(String reference, String accountNumber, String description, String startBal, String mutation,
 			String endBal) {
 		super();
 		this.reference = reference;

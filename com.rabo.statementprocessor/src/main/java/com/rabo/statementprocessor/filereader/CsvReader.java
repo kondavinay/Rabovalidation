@@ -10,17 +10,32 @@ import org.xml.sax.SAXException;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
-import com.rabo.statementprocessor.validation.ValidationClass;
+import com.rabo.statementprocessor.validation.RecordReferenceValidation;
 import com.rabo.statementprocessorInterface.FileProcessor;
-import com.rabo.statementprocessor.pojo.PojoClass;
+import com.rabo.statementprocessor.pojo.CsvANDXmlPojo;
+import com.rabo.statementprocessor.validation.*;
 
+/**
+ * 
+ * this class reads the csv file and converts each customer records into string
+ * and store that into array for further validation.
+ */
 @Component
-//@Primary
+@Primary
 public class CsvReader implements FileProcessor {
 
-	ArrayList<PojoClass> csvList = new ArrayList<PojoClass>();
+	ArrayList<CsvANDXmlPojo> csvList = new ArrayList<CsvANDXmlPojo>();
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
+	/**
+	 * This is the Method implemented from the FileProcessor Interface,in this the
+	 * csv file will be read by ColumnPositionMappingStrategy
+	 * 
+	 * @param args Unused.
+	 * 
+	 * 
+	 */
+
 	public void process() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
 		CSVReader csvreader = null;
 		try {
@@ -28,7 +43,7 @@ public class CsvReader implements FileProcessor {
 
 			@SuppressWarnings("rawtypes")
 			ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
-			strategy.setType(PojoClass.class);
+			strategy.setType(CsvANDXmlPojo.class);
 			String[] csv = { "reference", "accountNumber", "description", "startBal", "mutation", "endBal" };
 			strategy.setColumnMapping(csv);
 
@@ -36,34 +51,21 @@ public class CsvReader implements FileProcessor {
 			CsvToBean ctb = new CsvToBean();
 			@SuppressWarnings("rawtypes")
 			ArrayList csvList = (ArrayList) ctb.parse(strategy, csvreader);
-			PojoClass[] csvarr = (PojoClass[]) csvList.toArray(new PojoClass[csvList.size()]);
+			CsvANDXmlPojo[] csvarr = (CsvANDXmlPojo[]) csvList.toArray(new CsvANDXmlPojo[csvList.size()]);
 
-			String[] value = new String[csvarr.length];
-
-			for (int i = 0; i < csvarr.length; i++) {
-				value[i] = csvarr[i].getReference() + "," + csvarr[i].getAccountNumber() + ","
-						+ csvarr[i].getDescription() + "," + csvarr[i].getStartBal() + "," + csvarr[i].getMutation()
-						+ "," + csvarr[i].getEndBal();
-				// System.out.println(value[i].toString());
-			}
-
-			ValidationClass.validationMethod(value);
+			FileReaderProcessingClass.fileReader(csvarr);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 		}
-		
-		 finally
-			{
-				try
-				{
-					//closing the reader
-					csvreader.close();
-				}
-				catch(Exception ee)
-				{
-					ee.printStackTrace();
-				}
+
+		finally {
+			try {
+				// closing the reader
+				csvreader.close();
+			} catch (Exception ee) {
+				ee.printStackTrace();
 			}
+		}
 
 	}
 

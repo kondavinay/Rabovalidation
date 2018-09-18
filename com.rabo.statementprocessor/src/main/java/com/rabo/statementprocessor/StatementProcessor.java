@@ -1,4 +1,5 @@
 package com.rabo.statementprocessor;
+
 import com.rabo.statementprocessorInterface.FileProcessor;
 import java.io.IOException;
 
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 @Component
-public class File {
+public class StatementProcessor {
 
 	@Autowired
-	
+
 	FileProcessor file;
-	
+
 	public FileProcessor getFile() {
 		return file;
 	}
@@ -24,21 +25,20 @@ public class File {
 		this.file = file;
 	}
 
-	public void reading() throws ClassNotFoundException  {
-		
+	public void csvAndXmlFileReading() throws ClassNotFoundException {
+
 		System.out.println("file reading");
 		try {
 			file.process();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
 }
- 
